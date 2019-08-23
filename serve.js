@@ -4,11 +4,32 @@ var questions = [
     "Quel est ton langage de programmation préféré ?"
 ];
 
+var reactions = [
+    "Tu es là ?",
+    "Allô",
+    "Bon ..."
+]
+
 var answers = [];
+var actualIndex;
+
+function createTimeout() {
+    setTimeout(function() {
+        askWithReaction();
+    }, 5000);
+};
 
 function ask(index) {
-    process.stdout.write(`\n\n${questions[index]}\n\n`);
+    actualIndex = index;
+    process.stdout.write(`${questions[index]} >`);
+    createTimeout();
 };
+
+function askWithReaction() {
+    process.stdout.clearLine();
+    process.stdout.cursorTo(0);
+    process.stdout.write(`${reactions[actualIndex]} ${questions[actualIndex]} >`);
+}
 
 process.stdin.on('data', function(data) {
     answers.push(data.toString().trim());
