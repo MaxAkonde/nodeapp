@@ -1,48 +1,36 @@
+var readline = require('readline');
+var rl = readline.createInterface(process.stdin, process.stdout);
+
 var questions = [
-    "Comment t'appelles-tu ?",
-    "Que fais-tu dans la vie ?",
-    "Quel est ton langage de programmation préféré ?"
+    "Comment t'appelles-tu ? ",
+    "Que fais-tu dans la vie ? ",
+    "Quel est ton langage de programmation préféré ? "
 ];
 
-var reactions = [
-    "Tu es là ?",
-    "Allô",
-    "Bon ..."
-]
+var person = {};
+var attributes = ['name', 'hobby', 'lg'];
+var actualIndex = 0;
 
-var answers = [];
-var actualIndex;
-
-function createTimeout() {
-    setTimeout(function() {
-        askWithReaction();
-    }, 5000);
-};
-
-function ask(index) {
-    actualIndex = index;
-    process.stdout.write(`${questions[index]} >`);
-    createTimeout();
-};
-
-function askWithReaction() {
-    process.stdout.clearLine();
-    process.stdout.cursorTo(0);
-    process.stdout.write(`${reactions[actualIndex]} ${questions[actualIndex]} >`);
+function getQuestion() {
+    return questions[actualIndex];
 }
 
-process.stdin.on('data', function(data) {
-    answers.push(data.toString().trim());
+function ask() {
+    rl.question(getQuestion(), function(answer) {
+        person[attributes[actualIndex]] = answer;
+        actualIndex++;
 
-    if (questions.length === answers.length) {
-        process.exit();
-    }
+        if (actualIndex === questions.length) {
+            rl.close();
+        }
 
-    ask(answers.length);
+        ask();
+    });
+}
+
+rl.on('close', function() {
+    console.log(person);
+    process.exit();
 });
 
-process.on('exit', function() {
-    process.stdout.write(`\n\n${answers[0]} ${answers[1]} ${answers[2]}\n\n`);
-});
-
-ask(0);
+ask();
