@@ -1,10 +1,14 @@
-var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
+var child = spawn('node', ['spawned.js']);
 
-exec('ls', function(error, stdout) {
-    if (error) {
-        throw error;
-    }
+child.stdout.on('data', (data) => {
+    process.stdout.write(data);
+});
 
-    console.log('Listen finished');
-    console.log(stdout);
+process.stdin.on('data', (data) => {
+    child.stdin.write(data);
+
+    setTimeout(() => {
+        process.exit();
+    }, 100);
 });
