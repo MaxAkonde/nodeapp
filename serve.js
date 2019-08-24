@@ -1,15 +1,10 @@
-var questionHandler = require('./questionHandler');
+var exec = require('child_process').exec;
 
-var questions = [
-    "Comment t'appelles-tu ? ",
-    "Que fais-tu dans la vie ? ",
-    "Quel est ton langage de programmation préféré ? "
-];
+exec('ls', function(error, stdout) {
+    if (error) {
+        throw error;
+    }
 
-
-var attributes = ['name', 'hobby', 'lg'];
-
-questionHandler
-    .setQuestions(questions)
-    .setAttributes(attributes)
-    .ask();
+    console.log('Listen finished');
+    console.log(stdout);
+});
