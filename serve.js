@@ -4,7 +4,12 @@ fs.readdir('./', (error, files) => {
     if (error) {
         throw error;
     }
-    console.log(files);
+    files.forEach((fileName) => {
+        fs.readFile(fileName, 'UTF-8', (error, content) => {
+            console.log(`********* ${fileName} **********`);
+            console.log(content);
+        });
+    });
 });
 
 console.log('Read');
