@@ -1,11 +1,13 @@
 var fs = require('fs');
 
-content = `
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum beatae vel nam nisi fugiat, reprehenderit sit sapiente aut aliquid veritatis amet est, assumenda minus soluta explicabo neque rem dolore excepturi.
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum beatae vel nam nisi fugiat, reprehenderit sit sapiente aut aliquid veritatis amet est, assumenda minus soluta explicabo neque rem dolore excepturi.
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum beatae vel nam nisi fugiat, reprehenderit sit sapiente aut aliquid veritatis amet est, assumenda minus soluta explicabo neque rem dolore excepturi.
-`;
-
-fs.writeFile('text.txt', content.trim(), (error, file) => {
-    console.log('File created');
-});
+if (fs.existsSync('lib')) {
+    console.log('Dir exist');
+} else {
+    fs.mkdir('lib', (error) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Dir created');
+        }
+    });
+}
