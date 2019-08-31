@@ -1,13 +1,10 @@
 var fs = require('fs');
 
-if (fs.existsSync('lib')) {
-    console.log('Dir exist');
-} else {
-    fs.mkdir('lib', (error) => {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Dir created');
-        }
-    });
+try {
+
+    fs.unlinkSync('change.txt');
+} catch (error) {
+    return console.log(`Error on remove ${error.path}`);
 }
+
+console.log('Deleted');
