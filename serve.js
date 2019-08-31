@@ -1,10 +1,15 @@
 var fs = require('fs');
 
-try {
+var stream = fs.createReadStream('lib/lambda.js', 'UTF-8');
 
-    fs.unlinkSync('change.txt');
-} catch (error) {
-    return console.log(`Error on remove ${error.path}`);
-}
+stream.once('data', () => {
+    console.log('Start !\n');
+});
 
-console.log('Deleted');
+stream.on('data', (chunk) => {
+    process.stdout.write(`chunk : ${chunk.length}\n`);
+});
+
+stream.on('end', () => {
+    console.log('End !\n');
+});
