@@ -1,26 +1,33 @@
 var fs = require('fs');
-var readline = require('readline');
-var rl = readline.createInterface(process.stdin, process.stdout);
-var stream;
-var pseudo;
+var https = require('https');
 
-function addToStream() {
-    var question = 'Nom du chat ? ';
-
-    if (stream) {
-        question = `${pseudo} : `;
-    }
-
-    rl.question(question, function(data) {
-        if (!stream) {
-            stream = fs.createWriteStream(`${data}.txt`);
-            pseudo = data;
-        } else {
-            stream.write(`${pseudo} : ${data}\n`);
-        }
-
-        addToStream();
-    });
+var options = {
+    hostname: 'fr.wikipedia.org',
+    port: 443,
+    path: '/wiki/Node.js',
+    method: 'GET'
 }
 
-addToStream();
+var req = https.request(options, (res) => {
+    var responseBody = '';
+
+    console.log('Start !\n');
+    console.log(res.statusCode);
+    console.log(res.headers);
+
+    res.setEncoding('UTF-8');
+
+    res.on('data', (chunk) => {
+        console.log(chunk.length);
+        responseBody += chunk;
+    });
+
+    res.on('end', () => {
+        //console.log(responseBody);
+        fs.writeFile('nodejs.html', responseBody, () => {
+            console.log('Fichier crée !');
+        });
+    });
+});
+
+req.end();
