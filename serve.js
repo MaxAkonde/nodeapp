@@ -1,15 +1,26 @@
 var fs = require('fs');
+var readline = require('readline');
+var rl = readline.createInterface(process.stdin, process.stdout);
+var stream;
+var pseudo;
 
-var stream = fs.createReadStream('lib/lambda.js', 'UTF-8');
+function addToStream() {
+    var question = 'Nom du chat ? ';
 
-stream.once('data', () => {
-    console.log('Start !\n');
-});
+    if (stream) {
+        question = `${pseudo} : `;
+    }
 
-stream.on('data', (chunk) => {
-    process.stdout.write(`chunk : ${chunk.length}\n`);
-});
+    rl.question(question, function(data) {
+        if (!stream) {
+            stream = fs.createWriteStream(`${data}.txt`);
+            pseudo = data;
+        } else {
+            stream.write(`${pseudo} : ${data}\n`);
+        }
 
-stream.on('end', () => {
-    console.log('End !\n');
-});
+        addToStream();
+    });
+}
+
+addToStream();
